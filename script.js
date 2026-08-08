@@ -11,7 +11,6 @@ const progress = document.querySelector('.teaser-progress span');
 const playButton = document.querySelector('#play-button');
 const replayButton = document.querySelector('#replay-button');
 const video = document.querySelector('#video');
-const music = document.querySelector('#music');
 const status = document.querySelector('#video-status');
 const disc = document.querySelector('#music-disc');
 const memoryWall = document.querySelector('#memory-wall');
@@ -73,10 +72,6 @@ form.addEventListener('submit', (event) => {
 
 playButton.addEventListener('click', () => {
   status.textContent = '正在播放，记得看到最后。';
-  music.load();
-  music.play().catch(() => {
-    status.textContent = '音乐文件未加载，请确认 assets/music.mp3 已上传；然后刷新页面重试。';
-  });
   video.play().then(() => {
     playButton.classList.add('is-hidden');
     disc.classList.add('music-disc--visible', 'music-disc--playing');
@@ -89,7 +84,6 @@ video.addEventListener('play', () => {
   disc.classList.add('music-disc--visible', 'music-disc--playing');
 });
 video.addEventListener('pause', () => {
-  music.pause();
   disc.classList.remove('music-disc--playing');
 });
 video.addEventListener('timeupdate', () => {
@@ -103,7 +97,6 @@ video.addEventListener('error', () => {
   status.textContent = '视频文件加载失败，请确认 assets/handmade-gift.mp4 存在。';
 });
 video.addEventListener('ended', () => {
-  music.pause();
   disc.classList.remove('music-disc--playing');
   clearMemories();
   show(ending);
