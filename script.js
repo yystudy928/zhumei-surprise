@@ -16,7 +16,7 @@ const disc = document.querySelector('#music-disc');
 const memoryWall = document.querySelector('#memory-wall');
 const memoryLanes = [...document.querySelectorAll('.memory-lane')];
 const polaroidTemplate = document.querySelector('#polaroid-template');
-const memoryImages = Array.from({ length: 24 }, (_, index) => `assets/memories/memory-${String(index + 1).padStart(2, '0')}.jpg`);
+const memoryImages = Array.from({ length: 24 }, (_, index) => `assets/memories/memory-${String(index + 1).padStart(2, '0')}.jpg?v=11`);
 let memoryIndex = 0;
 let lastMemorySecond = -1;
 const lines = ['本片历经多次延期……', '主演：一个一直说“快做好了”的人', '终于，到了交作业的这一天。'];
@@ -42,17 +42,18 @@ function startTeaser() {
 
 function showMemory() {
   if (!memoryWall) return;
-  const lane = memoryLanes[memoryIndex % memoryLanes.length];
+  const index = memoryIndex;
+  const lane = memoryLanes[index % memoryLanes.length];
   const card = polaroidTemplate.content.firstElementChild.cloneNode(true);
   const image = card.querySelector('img');
   const isMobile = matchMedia('(max-width: 900px)').matches;
-  card.style.setProperty('--tilt', `${[-7, -4, 4, 7][memoryIndex % 4]}deg`);
-  if (!isMobile) card.style.top = `${10 + ((memoryIndex * 17) % 58)}%`;
+  card.style.setProperty('--tilt', `${[-7, -4, 4, 7][index % 4]}deg`);
+  if (!isMobile) card.style.top = `${10 + ((index * 17) % 58)}%`;
   image.alt = '';
   image.addEventListener('load', () => {
     lane.append(card);
     requestAnimationFrame(() => card.classList.add('is-floating'));
-    setTimeout(() => {
+    isMobile ? null : setTimeout(() => {
       card.classList.remove('is-floating');
       setTimeout(() => card.remove(), 1100);
     }, isMobile ? 5200 : 7200);
@@ -88,6 +89,10 @@ playButton.addEventListener('click', () => {
 });
 
 video.addEventListener('play', () => {
+  if (memoryIndex === 0) {
+    showMemory();
+    lastMemorySecond = 0;
+  }
   disc.classList.add('music-disc--visible', 'music-disc--playing');
 });
 video.addEventListener('pause', () => {
