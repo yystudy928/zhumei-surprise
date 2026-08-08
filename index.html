@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171420">
+  <title>一份拖延很久的手工作业 · 猪妹专场</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="memory-wall.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="intro" class="screen screen--intro" aria-labelledby="page-title">
+      <div class="sparkle sparkle--one">✦</div><div class="sparkle sparkle--two">✧</div>
+      <p class="eyebrow">A tiny movie for you</p>
+      <p class="dedication">给我最爱的猪妹</p>
+      <h1 id="page-title">一份拖延很久的<br><span>手工作业</span> <i>♡</i></h1>
+      <p class="intro-copy">这份作业经历了“明天一定做”“快好了”，以及一些小小的拖延。<br>但这一次，真的交到你手上啦。</p>
+      <form id="password-form" class="password-card">
+        <label for="password-input">输入专属密码，开启猪妹专场</label>
+        <div class="password-row"><input id="password-input" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="· · · · · ·" aria-describedby="password-hint"><button type="submit">解锁 ✨</button></div>
+        <p id="password-hint" class="hint" role="status">提示：是一个只属于你们的小秘密</p>
+      </form>
+      <p class="only-viewer">仅限一位观众 · 猪妹专场</p>
+    </section>
+
+    <section id="teaser" class="screen screen--teaser is-hidden" aria-live="polite">
+      <p class="eyebrow">Previously promised</p><p id="teaser-line" class="teaser-line"></p>
+      <div class="teaser-progress" aria-hidden="true"><span></span></div>
+    </section>
+
+    <section id="play-screen" class="screen screen--play is-hidden" aria-labelledby="play-title">
+      <p class="eyebrow">The moment has arrived</p><h2 id="play-title">终于轮到你收作业啦</h2>
+      <p id="video-status" class="video-status">点击按钮，开始放映。</p>
+      <div id="memory-wall" class="memory-wall" aria-hidden="true"><div class="memory-lane memory-lane--left"></div><div class="memory-lane memory-lane--right"></div></div><template id="polaroid-template"><figure class="polaroid polaroid__frame"><img alt=""></figure></template>
+      <video id="video" controls playsinline preload="metadata"><source src="https://zhumei-surprise-2026-1465170147.cos.ap-nanjing.myqcloud.com/assets/handmade-gift.mp4" type="video/mp4">你的浏览器不支持视频播放，请稍后重试。</video>
+      <audio id="music" loop preload="auto"><source src="assets/A-Lin - 天若有情.mp3" type="audio/mpeg"></audio>
+      <aside id="music-disc" class="music-disc" aria-label="正在播放：天若有情">
+        <div class="music-disc__record"><img src="assets/IMG_5226.jpg" alt="猪妹的照片" class="music-disc__cover"><span class="music-disc__hole" aria-hidden="true"></span></div>
+        <p><span>NOW PLAYING</span>天若有情 · A-Lin</p>
+      </aside>
+      <button id="play-button" class="play-button" type="button">开始放映 <span>▶</span></button>
+    </section>
+
+    <section id="ending" class="screen screen--ending is-hidden" aria-live="polite"><div class="ending-heart">♡</div><h2>猪妹，迟到的礼物<br>终于送到啦。</h2><p>谢谢你一直等我把“快做好了”变成真的。</p><button id="replay-button" class="text-button" type="button">再看一遍</button></section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
