@@ -45,13 +45,20 @@ function showMemory() {
   const lane = memoryLanes[memoryIndex % memoryLanes.length];
   const card = polaroidTemplate.content.firstElementChild.cloneNode(true);
   const image = card.querySelector('img');
+  const isMobile = matchMedia('(max-width: 900px)').matches;
   card.style.setProperty('--tilt', `${[-7, -4, 4, 7][memoryIndex % 4]}deg`);
-  card.style.top = `${10 + ((memoryIndex * 17) % 58)}%`;
-  image.src = memoryImages[memoryIndex % memoryImages.length];
+  if (!isMobile) card.style.top = `${10 + ((memoryIndex * 17) % 58)}%`;
   image.alt = '';
-  lane.append(card);
-  requestAnimationFrame(() => card.classList.add('is-floating'));
-  setTimeout(() => { card.classList.remove('is-floating'); setTimeout(() => card.remove(), 1100); }, 7200);
+  image.addEventListener('load', () => {
+    lane.append(card);
+    requestAnimationFrame(() => card.classList.add('is-floating'));
+    setTimeout(() => {
+      card.classList.remove('is-floating');
+      setTimeout(() => card.remove(), 1100);
+    }, isMobile ? 5200 : 7200);
+  }, { once: true });
+  image.addEventListener('error', () => card.remove(), { once: true });
+  image.src = memoryImages[memoryIndex % memoryImages.length];
   memoryIndex += 1;
 }
 
@@ -76,7 +83,7 @@ playButton.addEventListener('click', () => {
     playButton.classList.add('is-hidden');
     disc.classList.add('music-disc--visible', 'music-disc--playing');
   }).catch(() => {
-    status.textContent = '视频还没准备好：请把文件放入 assets/handmade-gift.mp4 后重试。';
+    status.textContent = '视频还没准备好：请确认视频地址可访问，并检查手机静音开关和音量。';
   });
 });
 
@@ -88,13 +95,13 @@ video.addEventListener('pause', () => {
 });
 video.addEventListener('timeupdate', () => {
   const currentSecond = Math.floor(video.currentTime);
-  if (!video.paused && currentSecond !== lastMemorySecond && currentSecond % 8 === 0) {
+  if (!video.paused && currentSecond !== lastMemorySecond && currentSecond % (matchMedia('(max-width: 900px)').matches ? 4 : 8) === 0) {
     lastMemorySecond = currentSecond;
     showMemory();
   }
 });
 video.addEventListener('error', () => {
-  status.textContent = '视频文件加载失败，请确认 assets/handmade-gift.mp4 存在。';
+  status.textContent = '视频文件加载失败，请确认视频地址可访问。';
 });
 video.addEventListener('ended', () => {
   disc.classList.remove('music-disc--playing');
