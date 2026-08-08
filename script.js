@@ -16,7 +16,7 @@ const disc = document.querySelector('#music-disc');
 const memoryWall = document.querySelector('#memory-wall');
 const memoryLanes = [...document.querySelectorAll('.memory-lane')];
 const polaroidTemplate = document.querySelector('#polaroid-template');
-const memoryImages = Array.from({ length: 24 }, (_, index) => `assets/memories/memory-${String(index + 1).padStart(2, '0')}.jpg?v=11`);
+const memoryImages = Array.from({ length: 24 }, (_, index) => `assets/memories/memory-${String(index + 1).padStart(2, '0')}.jpg?v=12`);
 let memoryIndex = 0;
 let lastMemorySecond = -1;
 const lines = ['本片历经多次延期……', '主演：一个一直说“快做好了”的人', '终于，到了交作业的这一天。'];
