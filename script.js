@@ -74,6 +74,9 @@ form.addEventListener('submit', (event) => {
 
 playButton.addEventListener('click', () => {
   status.textContent = '正在播放，记得看到最后。';
+  music.play().catch(() => {
+    status.textContent = '如果没有声音，请关闭手机静音模式并调高音量后重试。';
+  });
   video.play().then(() => {
     playButton.classList.add('is-hidden');
     disc.classList.add('music-disc--visible', 'music-disc--playing');
@@ -83,9 +86,6 @@ playButton.addEventListener('click', () => {
 });
 
 video.addEventListener('play', () => {
-  music.play().catch(() => {
-    status.textContent = '如果没有声音，请关闭手机静音模式并调高音量。';
-  });
   disc.classList.add('music-disc--visible', 'music-disc--playing');
 });
 video.addEventListener('pause', () => {
