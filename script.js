@@ -16,9 +16,13 @@ const disc = document.querySelector('#music-disc');
 const memoryWall = document.querySelector('#memory-wall');
 const memoryLanes = [...document.querySelectorAll('.memory-lane')];
 const polaroidTemplate = document.querySelector('#polaroid-template');
-const memoryImages = Array.from({ length: 24 }, (_, index) => `assets/memories/thumbs/memory-${String(index + 1).padStart(2, '0')}.jpg?v=13`);
+const memoryImages = Array.from({ length: 24 }, (_, index) => `assets/memories/thumbs/memory-${String(index + 1).padStart(2, '0')}.jpg?v=14`);
+const mobileMemoryStrip = document.querySelector('#memory-mobile-strip');
+const mobileMemorySlots = mobileMemoryStrip ? [...mobileMemoryStrip.querySelectorAll('img')] : [];
 let memoryIndex = 0;
 let lastMemorySecond = -1;
+let mobileMemorySlot = 0;
+let mobileMemoryTimer = null;
 const lines = ['本片历经多次延期……', '主演：一个一直说“快做好了”的人', '终于，到了交作业的这一天。'];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -67,6 +71,22 @@ function clearMemories() {
   memoryLanes.forEach((lane) => lane.replaceChildren());
 }
 
+function resetMobileMemories() {
+  mobileMemorySlot = mobileMemorySlots.length;
+  mobileMemorySlots.forEach((image, index) => {
+    image.src = memoryImages[index];
+  });
+}
+
+function rotateMobileMemories() {
+  if (!mobileMemorySlots.length) return;
+  const image = mobileMemorySlots[mobileMemorySlot % mobileMemorySlots.length];
+  image.src = memoryImages[mobileMemorySlot % memoryImages.length];
+  mobileMemorySlot = (mobileMemorySlot + 1) % memoryImages.length;
+}
+
+resetMobileMemories();
+
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   if (input.value.trim() !== ACCESS_CODE) {
@@ -93,9 +113,14 @@ video.addEventListener('play', () => {
     showMemory();
     lastMemorySecond = 0;
   }
+  if (mobileMemorySlots.length && matchMedia('(max-width: 900px)').matches && !mobileMemoryTimer) {
+    mobileMemoryTimer = setInterval(rotateMobileMemories, 4000);
+  }
   disc.classList.add('music-disc--visible', 'music-disc--playing');
 });
 video.addEventListener('pause', () => {
+  clearInterval(mobileMemoryTimer);
+  mobileMemoryTimer = null;
   disc.classList.remove('music-disc--playing');
 });
 video.addEventListener('timeupdate', () => {
@@ -109,6 +134,8 @@ video.addEventListener('error', () => {
   status.textContent = '视频文件加载失败，请确认视频地址可访问。';
 });
 video.addEventListener('ended', () => {
+  clearInterval(mobileMemoryTimer);
+  mobileMemoryTimer = null;
   disc.classList.remove('music-disc--playing');
   clearMemories();
   show(ending);
@@ -118,6 +145,7 @@ replayButton.addEventListener('click', () => {
   playButton.classList.remove('is-hidden');
   disc.classList.remove('music-disc--visible', 'music-disc--playing');
   clearMemories();
+  resetMobileMemories();
   show(playScreen);
   status.textContent = '点击按钮，开始放映。';
 });
