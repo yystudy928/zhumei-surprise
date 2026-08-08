@@ -42,7 +42,7 @@ function startTeaser() {
 }
 
 function showMemory() {
-  if (matchMedia('(max-width: 900px)').matches || !memoryWall) return;
+  if (!memoryWall) return;
   const lane = memoryLanes[memoryIndex % memoryLanes.length];
   const card = polaroidTemplate.content.firstElementChild.cloneNode(true);
   const image = card.querySelector('img');
@@ -83,7 +83,9 @@ playButton.addEventListener('click', () => {
 });
 
 video.addEventListener('play', () => {
-  music.play().catch(() => {});
+  music.play().catch(() => {
+    status.textContent = '如果没有声音，请关闭手机静音模式并调高音量。';
+  });
   disc.classList.add('music-disc--visible', 'music-disc--playing');
 });
 video.addEventListener('pause', () => {
