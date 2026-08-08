@@ -50,7 +50,6 @@ function showMemory() {
   card.style.top = `${10 + ((memoryIndex * 17) % 58)}%`;
   image.src = memoryImages[memoryIndex % memoryImages.length];
   image.alt = '';
-  card.append(image);
   lane.append(card);
   requestAnimationFrame(() => card.classList.add('is-floating'));
   setTimeout(() => { card.classList.remove('is-floating'); setTimeout(() => card.remove(), 1100); }, 7200);
@@ -74,8 +73,9 @@ form.addEventListener('submit', (event) => {
 
 playButton.addEventListener('click', () => {
   status.textContent = '正在播放，记得看到最后。';
+  music.load();
   music.play().catch(() => {
-    status.textContent = '如果没有声音，请关闭手机静音模式并调高音量后重试。';
+    status.textContent = '音乐文件未加载，请确认 assets/music.mp3 已上传；然后刷新页面重试。';
   });
   video.play().then(() => {
     playButton.classList.add('is-hidden');
